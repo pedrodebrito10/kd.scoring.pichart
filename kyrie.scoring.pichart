@@ -1,0 +1,54 @@
+let scoringData = [
+  { label: "Three-Point Shots", percent: 35, color: "#3357FF" },
+  { label: "Two-Point Shots", percent: 61, color: "#33FF57" },
+  { label: "Free Throws", percent: 4, color: "#F1C40F" }
+];
+
+function setup() {
+  createCanvas(400, 400);
+  noLoop();
+}
+
+function draw() {
+  background(220);
+  drawPieChart(200, scoringData);
+}
+
+function drawPieChart(diameter, data) {
+  let lastAngle = 0;
+  let cx = width / 2;
+  let cy = height / 2;
+
+  for (let i = 0; i < data.length; i++) {
+    let sliceAngle = radians(data[i].percent * 3.6);
+    fill(data[i].color);
+    arc(cx, cy, diameter, diameter, lastAngle, lastAngle + sliceAngle, PIE);
+
+    // Calculate label position
+    let midAngle = lastAngle + sliceAngle / 2;
+    let labelX = cx + cos(midAngle) * (diameter / 3);
+    let labelY = cy + sin(midAngle) * (diameter / 3);
+
+    // Draw text inside the pie slice
+    fill(255);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text(data[i].label + "\n" + data[i].percent + "%", labelX, labelY);
+
+    lastAngle += sliceAngle;
+  }
+}
+
+function drawLegend(data) {
+  let x = 20;
+  let y = height - 100;
+  let spacing = 20;
+
+  for (let i = 0; i < data.length; i++) {
+    fill(data[i].color);
+    rect(x, y + i * spacing, 15, 15);
+    fill(0);
+    textSize(12);
+    text(data[i].label + " (" + data[i].percent + "%)", x + 20, y + 12 + i * spacing);
+  }
+}
